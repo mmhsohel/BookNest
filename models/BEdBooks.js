@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { createBookSchema } from "./utils/bookSchema";
+import { createBookSchema } from "./utils/bookSchema.js";
 
 
 const btptBookSchema = new mongoose.Schema(
