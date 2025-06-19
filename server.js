@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import allRoute from "./routes/allRoute.js";
 import userRoute from "./routes/userRoute.js";
+import healthRoute from "./routes/health.js"
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -29,12 +30,11 @@ mongoose.connect(process.env.MONGO_URI, {
 // Routes
 app.use("/api", allRoute);
 app.use("/user", userRoute);
+app.use("/health", healthRoute);
+
 
 
 // In your Express backend
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok' });
-});
 
 
 // Start server
