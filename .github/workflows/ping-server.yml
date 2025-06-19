@@ -1,4 +1,4 @@
-name: Ping Server
+name: Ping Servers
 
 on:
   schedule:
@@ -8,5 +8,7 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Curl health endpoint
-        run: curl https://your-server-url.com/health
+      - name: Curl both health endpoints
+        run: |
+          curl https://booknest-1-vowm.onrender.com/health
+          curl https://booknest-production-25a6.up.railway.app/health
