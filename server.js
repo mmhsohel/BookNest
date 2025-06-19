@@ -30,5 +30,12 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use("/api", allRoute);
 app.use("/user", userRoute);
 
+
+// In your Express backend
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
+
 // Start server
 app.listen(port, () => console.log(`🚀 Server running at http://localhost:${port}`));
