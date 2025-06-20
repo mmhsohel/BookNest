@@ -3,7 +3,16 @@ import mongoose from "mongoose";
 import User from "../models/User.js";
 import jwt from 'jsonwebtoken';
 import { auth, authorize } from "../middleware/auth.js";
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+
+
+
+
 const router = express.Router();
+
 
 
 
@@ -18,7 +27,7 @@ router.post('/register', async (req, res) => {
     // Check if user already exists
     const existingUser = await User.findOne({ phone : phone });
     if (existingUser) {
-      return res.status(400).json({ message: 'Username already exists' });
+      return res.status(400).json({ message: 'User already exists' });
     }
 
     // Create new user
@@ -35,32 +44,80 @@ router.post('/register', async (req, res) => {
 });
 
 
-
+// POST /user/login
 router.post('/login', async (req, res) => {
-  const { phone, password } = req.body;
-  console.log(req.body)
-  if (!phone || !password) {
-    return res.status(400).json({ message: 'Username and password are required' });
-  }
-  const user = await User.findOne({ phone });
-  if (!user) return res.status(401).json({ message: 'Invalid credentials' });
-  const valid = await user.comparePassword(password);
-  if (!valid) return res.status(401).json({ message: 'Invalid credentials' });
+  try {
+    const { phone, password } = req.body;
 
-  const token = jwt.sign({ id: user._id, phone, name: user.name, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
-  res.json({ token, user: { name: user.name, role: user.role } });
+    if (!phone || !password) {
+      return res.status(400).json({ message: 'Phone and password are required' });
+    }
+
+    // Find user by phone
+    const user = await User.findOne({ phone });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found with this phone number' });
+    }
+
+    // Check if user is blocked
+    if (user.isBlocked) {
+      return res.status(403).json({ message: 'Your account is blocked. Contact support.' });
+    }
+
+    // Compare password
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Incorrect password' });
+    }
+
+    // Generate JWT
+    const payload = {
+      user: {
+        id: user._id,
+        role: user.role,
+        phone: user.phone,
+      },
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: '7d',
+    });
+
+    // Return token and user
+    console.log(token, user)
+    res.status(200).json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        phone: user.phone,
+        role: user.role,
+        email: user.email || '',
+        profilePic: user.profilePic || '',
+      },
+    });
+  } catch (err) {
+    console.error('Login Error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
+
+
+
+
 
 router.get('/admin', auth, authorize(['admin']), async (req, res) => {
   try {
-    const allUser = await User.find({});
+    const allUser = await User.find().select('-password'); // Exclude password field
     console.log("users", allUser);
+
     res.json({ success: true, users: allUser });
   } catch (error) {
     console.error("Error fetching users:", error.message);
     res.status(500).json({ success: false, message: "Failed to fetch users", error: error.message });
   }
 });
+
 
 
 router.patch('/admin/:userId', auth, authorize(['admin']), async (req, res) => {

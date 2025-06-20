@@ -11,10 +11,11 @@ import IbtedayeTextBook from "../models/IbtedayeBooks.js";
 import TechnicalTextBook from "../models/TechnicalBooks.js";
 import LessonPlan from "../models/LessonPlan.js";
 import DakilTextBook from "../models/DakilBooks.js"
+import { auth, authorize } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/:modelName", async (req, res) => {
+router.get("/:modelName",   async (req, res) => {
   const { modelName } = req.params;
 
   let Model;
