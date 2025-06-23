@@ -10,12 +10,12 @@ import MEdBook from "../models/MEdBooks.js";
 import IbtedayeTextBook from "../models/IbtedayeBooks.js";
 import TechnicalTextBook from "../models/TechnicalBooks.js";
 import LessonPlan from "../models/LessonPlan.js";
-import DakilTextBook from "../models/DakilBooks.js"
+import DakilTextBook from "../models/DakilBooks.js";
 import { auth, authorize } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/:modelName",   async (req, res) => {
+router.get("/:modelName", async (req, res) => {
   const { modelName } = req.params;
 
   let Model;
@@ -32,7 +32,7 @@ router.get("/:modelName",   async (req, res) => {
     case "technicaltextbooks":
       Model = TechnicalTextBook;
       break;
-        case "technicaltextbooks":
+    case "dakiltextbooks":
       Model = DakilTextBook;
       break;
     case "lessonplans":
@@ -147,7 +147,7 @@ router.post("/:modelName/:className/:subName/add", async (req, res) => {
 
   let Model;
   switch (modelName.toLowerCase()) {
-   case "btptbooks":
+    case "btptbooks":
       Model = BtptBook;
       break;
     case "hightextbooks":
@@ -216,7 +216,7 @@ router.delete("/:modelName/:className", async (req, res) => {
 
   let Model;
   switch (modelName.toLowerCase()) {
-   case "btptbooks":
+    case "btptbooks":
       Model = BtptBook;
       break;
     case "hightextbooks":
@@ -331,16 +331,15 @@ router.post("/:modelName", async (req, res) => {
   }
 });
 
-
 router.patch("/:modelName/:className", async (req, res) => {
   const { modelName, className } = req.params;
   // Avoid destructuring reserved keyword 'class'
-  const { class: banglaClassData, envClass, version, serial} = req.body;
+  const { class: banglaClassData, envClass, version, serial } = req.body;
   console.log(req.body);
   // Dynamically get the correct model
   let Model;
   switch (modelName.toLowerCase()) {
-   case "btptbooks":
+    case "btptbooks":
       Model = BtptBook;
       break;
     case "hightextbooks":
@@ -380,14 +379,13 @@ router.patch("/:modelName/:className", async (req, res) => {
     });
 
     if (!book) return res.status(404).json({ message: "Class not found" });
-    
+
     // Merge new data into the existing document
     if (version === "bangla") {
-      book.class = banglaClassData,
-      book.serial = serial
+      (book.class = banglaClassData), (book.serial = serial);
     } else {
       book.envClass = envClass;
-      book.serial = serial
+      book.serial = serial;
     }
 
     await book.save();
@@ -446,6 +444,38 @@ router.delete("/cardandcarousel/:card/:cardId", async (req, res) => {
     console.log("Deleted book:", deletedBook);
 
     res.json({ message: "Book deleted successfully", success: true });
+  } catch (error) {
+    console.error("Error deleting book:", error.message);
+    res
+      .status(500)
+      .json({ message: "Error deleting book", error: error.message });
+  }
+});
+
+router.delete("/:modelName/:className/:version/:bookId", async (req, res) => {
+  const { modelName, className, version, bookId } = req.params;
+  console.log(modelName, className, version, bookId);
+  try {
+    const book = await TechnicalTextBook.findOne({
+      $or: [{ class: className }, { envClass: className }],
+    });
+    if (!book) return res.status(404).json({ message: "Class not found" });
+
+    if (version === "bangla") {
+      const updatedSubs = book?.subs.filter((b) => b._id.toString() !== bookId);
+      book.subs = updatedSubs;
+      
+    } else {
+      const updatedEnvSubs = book?.envSubs.filter(
+        (b) => b._id.toString() !== bookId
+      );
+      book.envSubs = updatedEnvSubs;
+      
+    }
+
+    await book.save(); // ✅ Save the updated document to MongoDB
+
+    return res.status(200).json({ message: "Book deleted successfully", book });
   } catch (error) {
     console.error("Error deleting book:", error.message);
     res
