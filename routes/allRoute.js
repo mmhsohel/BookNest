@@ -198,10 +198,14 @@ router.post("/:modelName/:className/:subName/add", async (req, res) => {
     collection[subName].push(newBook);
     collection.markModified(subName);
     await collection.save();
+const createdBook = collection[subName][collection[subName].length - 1];
+console.log("createBook", createdBook)
 
-    res
-      .status(201)
-      .json({ message: "Book added", success: true, data: newBook });
+res
+  .status(201)
+  .json({ message: "Book added", success: true, data: createdBook })
+
+
   } catch (error) {
     console.error("Error adding book:", error.message);
     res
