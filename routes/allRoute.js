@@ -421,7 +421,7 @@ router.patch("/cardandcarousel/:card/:cardId", async (req, res) => {
 
     await book.save();
 
-    res.json({ message: "Book updated successfully", success: true });
+    res.json({ message: "Book updated successfully", success: true, book });
   } catch (error) {
     console.error("Error updating book:", error.message);
     res
