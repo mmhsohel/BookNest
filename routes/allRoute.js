@@ -12,6 +12,12 @@ import TechnicalTextBook from "../models/TechnicalBooks.js";
 import LessonPlan from "../models/LessonPlan.js";
 import DakilTextBook from "../models/DakilBooks.js";
 import { auth, authorize } from "../middleware/auth.js";
+import OtherBook from "../models/Other.js";
+import Other1Book from "../models/Other1.js";
+import Other2Book from "../models/Other2.js";
+import Other3Book from "../models/Other3.js";
+import Other4Book from "../models/Other4.js";
+import Other5Book from "../models/Other5.js";
 
 const router = express.Router();
 
@@ -50,6 +56,29 @@ router.get("/:modelName", async (req, res) => {
     case "medbooks":
       Model = MEdBook;
       break;
+    case "other":
+      Model = OtherBook;
+      break;
+
+    case "other1":
+      Model = Other1Book;
+      break;
+
+    case "other2":
+      Model = Other2Book;
+      break;
+
+    case "other3":
+      Model = Other3Book;
+      break;
+    case "other4":
+      Model = Other4Book;
+      break;
+
+    case "other5":
+      Model = Other5Book;
+      break;
+
     case "carousel":
       Model = CarouselImage;
       break;
@@ -99,6 +128,29 @@ router.patch("/:modelName/:className/:subName/:bookId", async (req, res) => {
     case "medbooks":
       Model = MEdBook;
       break;
+       case "other":
+      Model = OtherBook;
+      break;
+
+    case "other1":
+      Model = Other1Book;
+      break;
+
+    case "other2":
+      Model = Other2Book;
+      break;
+
+    case "other3":
+      Model = Other3Book;
+      break;
+    case "other4":
+      Model = Other4Book;
+      break;
+
+    case "other5":
+      Model = Other5Book;
+      break;
+
     default:
       return res.status(400).json({ message: "Invalid model name" });
   }
@@ -177,6 +229,29 @@ router.post("/:modelName/:className/:subName/add", async (req, res) => {
     case "medbooks":
       Model = MEdBook;
       break;
+ case "other":
+      Model = OtherBook;
+      break;
+
+    case "other1":
+      Model = Other1Book;
+      break;
+
+    case "other2":
+      Model = Other2Book;
+      break;
+
+    case "other3":
+      Model = Other3Book;
+      break;
+    case "other4":
+      Model = Other4Book;
+      break;
+
+    case "other5":
+      Model = Other5Book;
+      break;
+
     default:
       return res.status(400).json({ message: "Invalid model name" });
   }
@@ -198,14 +273,12 @@ router.post("/:modelName/:className/:subName/add", async (req, res) => {
     collection[subName].push(newBook);
     collection.markModified(subName);
     await collection.save();
-const createdBook = collection[subName][collection[subName].length - 1];
-console.log("createBook", createdBook)
+    const createdBook = collection[subName][collection[subName].length - 1];
+    console.log("createBook", createdBook);
 
-res
-  .status(201)
-  .json({ message: "Book added", success: true, data: createdBook })
-
-
+    res
+      .status(201)
+      .json({ message: "Book added", success: true, data: createdBook });
   } catch (error) {
     console.error("Error adding book:", error.message);
     res
@@ -250,6 +323,29 @@ router.delete("/:modelName/:className", async (req, res) => {
     case "medbooks":
       Model = MEdBook;
       break;
+ case "other":
+      Model = OtherBook;
+      break;
+
+    case "other1":
+      Model = Other1Book;
+      break;
+
+    case "other2":
+      Model = Other2Book;
+      break;
+
+    case "other3":
+      Model = Other3Book;
+      break;
+    case "other4":
+      Model = Other4Book;
+      break;
+
+    case "other5":
+      Model = Other5Book;
+      break;
+
     default:
       return res.status(400).json({ message: "Invalid model name" });
   }
@@ -302,6 +398,28 @@ router.post("/:modelName", async (req, res) => {
       break;
     case "medbooks":
       Model = MEdBook;
+      break;
+       case "other":
+      Model = OtherBook;
+      break;
+
+    case "other1":
+      Model = Other1Book;
+      break;
+
+    case "other2":
+      Model = Other2Book;
+      break;
+
+    case "other3":
+      Model = Other3Book;
+      break;
+    case "other4":
+      Model = Other4Book;
+      break;
+
+    case "other5":
+      Model = Other5Book;
       break;
     case "carousel":
       Model = CarouselImage;
@@ -372,6 +490,28 @@ router.patch("/:modelName/:className", async (req, res) => {
       break;
     case "medbooks":
       Model = MEdBook;
+      break;
+       case "other":
+      Model = OtherBook;
+      break;
+
+    case "other1":
+      Model = Other1Book;
+      break;
+
+    case "other2":
+      Model = Other2Book;
+      break;
+
+    case "other3":
+      Model = Other3Book;
+      break;
+    case "other4":
+      Model = Other4Book;
+      break;
+
+    case "other5":
+      Model = Other5Book;
       break;
     default:
       return res.status(400).json({ message: "Invalid model name" });
@@ -468,13 +608,11 @@ router.delete("/:modelName/:className/:version/:bookId", async (req, res) => {
     if (version === "bangla") {
       const updatedSubs = book?.subs.filter((b) => b._id.toString() !== bookId);
       book.subs = updatedSubs;
-      
     } else {
       const updatedEnvSubs = book?.envSubs.filter(
         (b) => b._id.toString() !== bookId
       );
       book.envSubs = updatedEnvSubs;
-      
     }
 
     await book.save(); // ✅ Save the updated document to MongoDB
