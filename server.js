@@ -4,6 +4,7 @@ import cors from "cors";
 import allRoute from "./routes/allRoute.js";
 import userRoute from "./routes/userRoute.js";
 import healthRoute from "./routes/health.js"
+import versionRoute from "./routes/versionRoutes.js"
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -31,6 +32,7 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use("/api", allRoute);
 app.use("/user", userRoute);
 app.use("/", healthRoute);
+app.use('/', versionRoute)
 
 
 
