@@ -12,12 +12,13 @@ import TechnicalTextBook from "../models/TechnicalBooks.js";
 import LessonPlan from "../models/LessonPlan.js";
 import DakilTextBook from "../models/DakilBooks.js";
 import { auth, authorize } from "../middleware/auth.js";
-import OtherBook from "../models/Other.js";
 import Other1Book from "../models/Other1.js";
 import Other2Book from "../models/Other2.js";
 import Other3Book from "../models/Other3.js";
 import Other4Book from "../models/Other4.js";
 import Other5Book from "../models/Other5.js";
+import CollegeTextBook from "../models/collegetextbooks.js";
+import PreprimaryBook from "../models/Preprimary.js";
 
 const router = express.Router();
 
@@ -31,6 +32,9 @@ router.get("/:modelName", async (req, res) => {
       break;
     case "hightextbooks":
       Model = HighTextBook;
+      break;
+    case "collegetextbooks":
+      Model = CollegeTextBook;
       break;
     case "ibtedayetextbooks":
       Model = IbtedayeTextBook;
@@ -56,8 +60,8 @@ router.get("/:modelName", async (req, res) => {
     case "medbooks":
       Model = MEdBook;
       break;
-    case "other":
-      Model = OtherBook;
+    case "preprimary":
+      Model = PreprimaryBook;
       break;
 
     case "other1":
@@ -104,6 +108,9 @@ router.patch("/:modelName/:className/:subName/:bookId", async (req, res) => {
     case "hightextbooks":
       Model = HighTextBook;
       break;
+     case "collegetextbooks":
+      Model = CollegeTextBook;
+      break;
     case "ibtedayetextbooks":
       Model = IbtedayeTextBook;
       break;
@@ -128,8 +135,8 @@ router.patch("/:modelName/:className/:subName/:bookId", async (req, res) => {
     case "medbooks":
       Model = MEdBook;
       break;
-       case "other":
-      Model = OtherBook;
+       case "preprimary":
+      Model = PreprimaryBook;
       break;
 
     case "other1":
@@ -205,6 +212,9 @@ router.post("/:modelName/:className/:subName/add", async (req, res) => {
     case "hightextbooks":
       Model = HighTextBook;
       break;
+     case "collegetextbooks":
+      Model = CollegeTextBook;
+      break;
     case "ibtedayetextbooks":
       Model = IbtedayeTextBook;
       break;
@@ -229,8 +239,8 @@ router.post("/:modelName/:className/:subName/add", async (req, res) => {
     case "medbooks":
       Model = MEdBook;
       break;
- case "other":
-      Model = OtherBook;
+ case "preprimary":
+      Model = PreprimaryBook;
       break;
 
     case "other1":
@@ -299,6 +309,9 @@ router.delete("/:modelName/:className", async (req, res) => {
     case "hightextbooks":
       Model = HighTextBook;
       break;
+     case "collegetextbooks":
+      Model = CollegeTextBook;
+      break;
     case "ibtedayetextbooks":
       Model = IbtedayeTextBook;
       break;
@@ -323,8 +336,8 @@ router.delete("/:modelName/:className", async (req, res) => {
     case "medbooks":
       Model = MEdBook;
       break;
- case "other":
-      Model = OtherBook;
+ case "preprimary":
+      Model = PreprimaryBook;
       break;
 
     case "other1":
@@ -375,6 +388,9 @@ router.post("/:modelName", async (req, res) => {
     case "hightextbooks":
       Model = HighTextBook;
       break;
+     case "collegetextbooks":
+      Model = CollegeTextBook;
+      break;
     case "ibtedayetextbooks":
       Model = IbtedayeTextBook;
       break;
@@ -399,8 +415,8 @@ router.post("/:modelName", async (req, res) => {
     case "medbooks":
       Model = MEdBook;
       break;
-       case "other":
-      Model = OtherBook;
+       case "preprimary":
+      Model = PreprimaryBook;
       break;
 
     case "other1":
@@ -467,6 +483,9 @@ router.patch("/:modelName/:className", async (req, res) => {
     case "hightextbooks":
       Model = HighTextBook;
       break;
+     case "collegetextbooks":
+      Model = CollegeTextBook;
+      break;
     case "ibtedayetextbooks":
       Model = IbtedayeTextBook;
       break;
@@ -491,8 +510,8 @@ router.patch("/:modelName/:className", async (req, res) => {
     case "medbooks":
       Model = MEdBook;
       break;
-       case "other":
-      Model = OtherBook;
+       case "preprimary":
+      Model = PreprimaryBook;
       break;
 
     case "other1":

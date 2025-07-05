@@ -16,7 +16,7 @@ const otherSchema = new mongoose.Schema(
 otherSchema.pre("save", async function (next) {
   if (this.isNew) {
     const last = await mongoose
-      .model("OtherBook")
+      .model("PreprimaryBook")
       .findOne()
       .sort("-serial");
     this.serial = last ? last.serial + 1 : 1;
@@ -24,9 +24,9 @@ otherSchema.pre("save", async function (next) {
   next();
 });
 
-const OtherBook = mongoose.model(
-  "OtherBook",
+const PreprimaryBook = mongoose.model(
+  "PreprimaryBook",
   otherSchema
 );
 
-export default OtherBook;
+export default PreprimaryBook;
